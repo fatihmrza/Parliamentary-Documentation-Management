@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public abstract class Dokument {
-    private int id;
+    private final int id;
     private String title;
     private String content;
     private LocalDate date;
@@ -55,6 +55,8 @@ public abstract class Dokument {
 
     protected void changeDate(LocalDate new_date, User user){
         Log newdate = Log.createLog("date", this.date.toString(), new_date.toString(), user, LocalDateTime.now());
+        this.logs.add(newdate);
+        this.date = new_date;
     }
 
     protected void addLog(Log log){

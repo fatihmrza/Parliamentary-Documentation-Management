@@ -32,8 +32,8 @@ public class Rede extends Dokument {
 
     @Override
     public String toString(){
-        return ("Document type: " + Rede.DOCUMENT_TYPE + " " + "Speaker: " + this.speaker.getId() + " " +
-                "title: " + this.getTitle() + " " + "Date created: " + this.getDate() + " ");
+        return ("Document type: " + Rede.DOCUMENT_TYPE + " " + "Document id: " + this.getId() + " " + "Speaker: " + this.speaker.getId() + " " +
+                "title: " + this.getTitle() + " " + "Date created: " + this.getDate() + " " + "Number of change on document: " + this.getLogs().size());
     }
 
 }
