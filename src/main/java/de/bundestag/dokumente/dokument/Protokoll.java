@@ -53,7 +53,7 @@ public class Protokoll extends Dokument{
         @Override
         public String toString(){
             return ("Document type: " + Protokoll.DOCUMENT_TYPE + " " + "Document id: " + this.getId() + " " + "Session number: " + this.sessionNumber + " " +
-                    "title: " + this.getTitle() + " " + "Date created: " + this.getDate() + " " + "Number of change on document: " + this.getLogs().size());
+                    "title: " + this.getTitle() + " " + "Date created: " + this.getDate() + " " + "Number of change on document: " + this.getLogs().size() + "\n" + "Overview to speeches: " + this.getSpeeches().toString());
         }
 }
 
