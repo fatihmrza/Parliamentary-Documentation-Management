@@ -12,7 +12,7 @@ public abstract class Dokument {
     private String title;
     private String content;
     private LocalDate date;
-    private final ArrayList<Log> logs = new ArrayList<Log>();
+    private final ArrayList<Log> logs = new ArrayList<>();
 
     public Dokument(int id, String title, String content, LocalDate date){
         this.id = id;
@@ -41,22 +41,22 @@ public abstract class Dokument {
         return this.logs;
     }
 
-    protected void changeContent(String new_content, User user){
-        Log newcont = Log.createLog("content", this.content, new_content, user, LocalDateTime.now());
+    protected void changeContent(String newContent, User user){
+        Log newcont = Log.createLog("content", this.content, newContent, user, LocalDateTime.now());
         this.logs.add(newcont);
-        this.content = new_content;
+        this.content = newContent;
     }
 
-    protected void changeTitle(String new_title, User user){
-        Log newtitle = Log.createLog("title", this.title, new_title, user, LocalDateTime.now());
+    protected void changeTitle(String newTitle, User user){
+        Log newtitle = Log.createLog("title", this.title, newTitle, user, LocalDateTime.now());
         this.logs.add(newtitle);
-        this.title = new_title;
+        this.title = newTitle;
     }
 
-    protected void changeDate(LocalDate new_date, User user){
-        Log newdate = Log.createLog("date", this.date.toString(), new_date.toString(), user, LocalDateTime.now());
+    protected void changeDate(LocalDate newDate, User user){
+        Log newdate = Log.createLog("date", this.date.toString(), newDate.toString(), user, LocalDateTime.now());
         this.logs.add(newdate);
-        this.date = new_date;
+        this.date = newDate;
     }
 
     protected void addLog(Log log){

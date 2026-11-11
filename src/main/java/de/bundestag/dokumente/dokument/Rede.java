@@ -18,10 +18,10 @@ public class Rede extends Dokument {
     public String getSpeakerName(){
         return this.speaker.getName();
     }
-    protected void changeSpeaker(Person new_speaker, User user){
-        Log newspeak = Log.createLog("speaker", String.valueOf(this.speaker.getId()), String.valueOf(new_speaker.getId()), user, LocalDateTime.now());
+    protected void changeSpeaker(Person newSpeaker, User user){
+        Log newspeak = Log.createLog("speaker", String.valueOf(this.speaker.getId()), String.valueOf(newSpeaker.getId()), user, LocalDateTime.now());
         this.addLog(newspeak);
-        this.speaker = new_speaker;
+        this.speaker = newSpeaker;
     }
 
 
