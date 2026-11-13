@@ -10,9 +10,14 @@ import java.util.Map;
 
 public class Dokumentenverwaltung {
 
-    private Map<Integer, Dokument> docs = new HashMap<>();
+    private static Map<Integer, Dokument> docs = new HashMap<>();
     public Dokumentenverwaltung(){
 
+    }
+
+
+    public static Map<Integer, Dokument> getDocuments(){
+        return docs;
     }
 
     public Rede createRede(int id, String title, String content, LocalDate date, Person speaker, User user) {

@@ -10,14 +10,15 @@ public class Rede extends Dokument {
     private Person speaker;
     private static final String DOCUMENT_TYPE = "Rede";
 
-    public Rede(int id, String title, String content, LocalDate date,Person speaker){
+    protected Rede(int id, String title, String content, LocalDate date,Person speaker){
         super(id, title, content, date);
         this.speaker = speaker;
 
     }
-    public String getSpeakerName(){
-        return this.speaker.getName();
+    public int getSpeakerId(){
+        return this.speaker.getId();
     }
+
     protected void changeSpeaker(Person newSpeaker, User user){
         Log newspeak = Log.createLog("speaker", String.valueOf(this.speaker.getId()), String.valueOf(newSpeaker.getId()), user, LocalDateTime.now());
         this.addLog(newspeak);

@@ -1,11 +1,16 @@
 package de.bundestag.dokumente;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
     private final int id;
     private Person person;
     private String role;
     private final String name;
     private static final User admin = new User(0, Person.admin, "ADMIN");
+    private static Map<Integer, User> users = new HashMap<>();
 
     private User(int id, Person person, String role){
         this.id = id;
@@ -34,6 +39,10 @@ public class User {
         return User.admin;
     }
 
+    public static Map<Integer, User> getUsers(){
+        return users;
+    }
+
     public void checkChangePermissions(){
         if (!((this.role.equals("BEARBEITER") || (this.role.equals("ADMIN"))))){
             throw new SecurityException("User does not have permission to modify this document");
@@ -42,7 +51,9 @@ public class User {
 
     public static User createBenutzer(int id, Person person, String rolle, User user){
         if (user.getRolle() == "ADMIN") {
-            return new User(id, person, rolle);
+            User newUser = new User(id, person, rolle);
+            users.put(id, newUser);
+            return newUser;
 
         }
         else { throw new SecurityException("User does not have a permission to creating user.");

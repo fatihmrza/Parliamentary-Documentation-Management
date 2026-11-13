@@ -1,6 +1,7 @@
 package de.bundestag.dokumente;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Log {
@@ -19,6 +20,25 @@ public class Log {
         this.timestamp = timestamp;
     }
 
+    public String getFieldName(){
+        return this.fieldName;
+    }
+
+    public String getOldValue(){
+        return this.oldValue;
+    }
+
+    public String getNewValue(){
+        return this.newValue;
+    }
+
+    public User getUser(){
+        return this.user;
+    }
+
+    public LocalDateTime getTimestamp(){
+        return this.timestamp;
+    }
 
     public static Log createLog(String fieldName, String oldValue, String newValue,
                                 User user, LocalDateTime timestamp){

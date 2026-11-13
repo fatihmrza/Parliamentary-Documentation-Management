@@ -14,7 +14,7 @@ public class Protokoll extends Dokument{
     private ArrayList<Rede> speeches = new ArrayList<Rede>();
     private static final String DOCUMENT_TYPE = "Protokoll";
 
-    public Protokoll(int id, int sessionNumber, String title, String content, LocalDate date){
+    protected Protokoll(int id, int sessionNumber, String title, String content, LocalDate date){
         super(id, title, content, date);
         this.sessionNumber = sessionNumber;
     }
@@ -54,6 +54,9 @@ public class Protokoll extends Dokument{
         public String toString(){
             return ("Document type: " + Protokoll.DOCUMENT_TYPE + " " + "Document id: " + this.getId() + " " + "Session number: " + this.sessionNumber + " " +
                     "title: " + this.getTitle() + " " + "Date created: " + this.getDate() + " " + "Number of change on document: " + this.getLogs().size() + "\n" + "Overview to speeches: " + this.getSpeeches().toString());
+        }
+        protected void restoreSpeeches(ArrayList<Rede> restoredSpeeches){
+            this.speeches = restoredSpeeches;
         }
 }
 

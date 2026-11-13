@@ -3,6 +3,7 @@ package de.bundestag.dokumente.dokument;
 import de.bundestag.dokumente.Log;
 import de.bundestag.dokumente.User;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public abstract class Dokument {
     private String title;
     private String content;
     private LocalDate date;
-    private final ArrayList<Log> logs = new ArrayList<>();
+    private  ArrayList<Log> logs = new ArrayList<>();
 
     public Dokument(int id, String title, String content, LocalDate date){
         this.id = id;
@@ -63,6 +64,10 @@ public abstract class Dokument {
         this.logs.add(log);
     }  // I added this line to preventing to inherit logs list attribute directly, so that it can be changed or deleted from subclasses.
        // I thought it would be robuster and more professional.
+
+    protected void restoreLog(ArrayList<Log> logs){
+        this.logs = logs;
+    }
 
     public abstract String getDocumentType();
 

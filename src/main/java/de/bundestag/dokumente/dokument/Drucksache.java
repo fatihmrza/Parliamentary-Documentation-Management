@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public class Drucksache extends Dokument{
     private static final String DOCUMENT_TYPE = "Drucksache";
-    public Drucksache(int id, String title, String content, LocalDate date) {
+    protected Drucksache(int id, String title, String content, LocalDate date) {
         super(id, title, content, date);
     }
 
