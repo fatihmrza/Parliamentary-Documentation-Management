@@ -4,6 +4,7 @@ import de.bundestag.dokumente.Log;
 import de.bundestag.dokumente.Person;
 import de.bundestag.dokumente.User;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -151,6 +152,15 @@ public class Dokumentenverwaltung {
         catch (SecurityException ex){
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void saveDocuments(DokumentSpeicher speicherInstanz, String filePath, User user) throws IOException {
+        speicherInstanz.saveDocuments(docs, filePath, user);
+    }
+
+    public void loadDocuments(DokumentSpeicher speicherInstanz, String filePath, User user) throws IOException{
+        Map<Integer, Dokument> docs = speicherInstanz.loadDocuments(filePath, user);
+        Dokumentenverwaltung.docs = docs;
     }
 
     public void printLogs(){

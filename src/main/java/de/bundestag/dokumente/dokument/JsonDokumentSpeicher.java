@@ -86,14 +86,14 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
                 LocalDate date = LocalDate.parse(jsonObject.getString("date"));
                 JSONArray jsonArrayLogs = jsonObject.getJSONArray("logs");
                 ArrayList<Log> logs = new ArrayList<>();
-                for (int j = 0; i < jsonArrayLogs.length(); i++){
+                for (int j = 0; j < jsonArrayLogs.length(); j++){
                     JSONObject jsonLogObject = jsonArrayLogs.getJSONObject(j);
                     String fieldname = jsonLogObject.getString("fieldname");
                     String newvalue = jsonLogObject.getString("newvalue");
                     String oldvalue = jsonLogObject.getString("oldvalue");
-                    User editor = User.getUsers().get(jsonLogObject.getInt("id"));
+                    User editor = User.getUsers().get(jsonLogObject.getInt("editor_id"));
                     LocalDateTime timestamp = LocalDateTime.parse(jsonLogObject.getString("time_of_change"));
-                    Log log = Log.createLog(fieldname, newvalue, oldvalue, editor, timestamp);
+                    Log log = Log.createLog(fieldname, oldvalue, newvalue, editor, timestamp);
                     logs.add(log);
                 }
 
