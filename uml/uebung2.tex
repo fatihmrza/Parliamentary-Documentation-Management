@@ -102,4 +102,49 @@
 
 
 \end{tikzpicture}
+
+\section*{Package Diagramm}
+\begin{tikzpicture}
+
+\begin{umlpackage}[name=bundestag]{de.bundestag.dokumente}
+\begin{umlpackage}{dokument}
+\umlclass[x=3, y=0, scale =0.75]{Dokument}{}{}
+\umlclass[x=1.5, y=-2, scale=0.75]{Rede}{}{}
+\umlclass[x=5, y=-2, scale=0.75]{Drucksache}{}{}
+\umlclass[x=3, y=-2, scale=0.75]{Protokoll}{}{}
+\umlclass[x=0, y=0, scale= 0.75]{DokumentFactory}{}{}
+\umlclass[x=6, y=0, scale=0.75]{Dokumentenverwaltung}{}{}
+\umlclass[x=1.5, y=-4, scale=0.75, type=interface]{DokumentSpeicher}{}{}
+\umlclass[x=6, y=-4, scale=0.75]{JsonDokumentSpeicher}{}{}
+\umlVHVinherit{Rede}{Dokument}
+\umlVHVinherit{Protokoll}{Dokument}
+\umlVHVinherit{Drucksache}{Dokument}
+\end{umlpackage}
+
+\umlclass[x=9, y=-2, scale=0.75]{User}{}{}
+\umlclass[x=9, y=0, scale=0.75]{Person}{}{}
+\umlclass[x=9, y=-4, scale=0.75]{Log}{}{}
+\end{umlpackage}
+
+\begin{umlpackage}[x=0, y=-10, name=utilities]{utilities}
+\umlclass[]{FileUtilities}{}{}
+\end{umlpackage}
+
+\begin{umlpackage}[x=9, y=-10, name = orgjson, type=library]{org.json}
+
+\umlclass{JSONObject}{}{}
+\umlclass[x=0, y=-2]{JSONArray}{}{}
+\end{umlpackage}
+\umlimport{dokument}{utilities}
+\umlimport{dokument}{orgjson}
+\umlimport{utilities}{orgjson}
+\umlimport{Person}{dokument}
+\umlimport{User}{dokument}
+\umlimport{Log}{dokument}
+
+\end{tikzpicture}
+
+
+
+
 \end{document}
