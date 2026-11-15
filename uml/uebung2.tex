@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Uebung2}
+\author{Fatih Mirza \\ 8500551}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+\usetikzlibrary{positioning}
+\usepackage[left=1.5cm, right=1.5cm, top=1.5cm, bottom=1.5cm, includeheadfoot]{geometry}
+
+\date{13 November 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{UML Cases}
+\begin{tikzpicture}
+\umlactor[name=User, x= -3, y= -3, scale= 1] {user}
+\umlactor[name=Person, x= -3, y= 0, scale = 1]{person}
+\umlactor[name= Bearbeiter, x=-3, y=-8, scale= 1]{bearbeiter}
+\umlactor[name= Leser, x= -5, y= -6, scale = 1]{leser}
+\umlactor[name = Admin, x = -1, y=-6, scale= 1]{admin}
+\umlVHVinherit{bearbeiter}{user}
+\umlVHVinherit{leser}{user}
+\umlVHVinherit{admin}{user}
+\umlinherit{user}{person}
+
+
+
+
+
+
+\end{umlsystem}
+
+\end{tikzpicture}
+\end{document}
