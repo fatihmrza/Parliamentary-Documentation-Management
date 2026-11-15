@@ -14,30 +14,58 @@
 
 \maketitle
 
-\section{UML Cases}
+\section*{UML Cases}
 \begin{tikzpicture}
 \umlactor[name=User, x= -3, y= -3, scale= 1] {user}
 \umlactor[name=Person, x= -3, y= 0, scale = 1]{person}
 \umlactor[name= Bearbeiter, x=-3, y=-6, scale= 1]{leser}
-\umlactor[name= Leser, x= -3, y= -9, scale = 1]{bearbeiter}
+\umlactor[name= Leser, x= -1, y= -4.5, scale = 1]{bearbeiter}
 \umlactor[name = Admin, x = -3, y=-12, scale= 1]{admin}
 \umlVHVinherit{leser}{user}
 \umlinherit{user}{person}
 \umlinherit{bearbeiter}{leser}
 \umlVHVinherit{admin}{bearbeiter}
-\begin{umlsystem}[x = 3, y= 0]{Bundestagsdokumentverwaltung} 
-\umlusecase[scale = 0.75]{Dokumente anzeigen} 
-\umlusecase[x=5, y=0, scale=0.75]{Aenderungshistorie anzeigen}
-\umlusecase[x = 2.5, y= -4, scale = 0.75]{Berechtigung Pruefen }
-\umlusecase[x = 0, y=-2, scale = 0.75]{Dokument anlegen}
-\umlusecase[x=5, y=-2, scale = 0.75]{Dokument bearbeiten}
-\umlusecase[x = 0, y=-6, scale =0.75]{als JSON speichern}
-\umlusecase[x=5, y=-6, scale = 0.75]{JSON als Dokument laden}
-\umlusecase[x=2.5, y=-8, scale = 0.75]{Benutzer anlegen}
+\begin{umlsystem}[x = 4, y= 0]{Bundestagsdokumentverwaltung} 
+\umlusecase[x=-1 , y= 0 , scale = 0.75, name = dokuanzeigen]{Dokumente anzeigen} 
+\umlusecase[x=6, y=0, scale=0.75, name = historieanzeigen]{Aenderungshistorie anzeigen}
+\umlusecase[x = 2.5, y= -4, scale = 0.75, name = pruefen]{Berechtigung pruefen }
+\umlusecase[x = -1, y=-1, scale = 0.75, name = anlegen]{Dokument anlegen}
+\umlusecase[x=6, y=-1, scale = 0.75, name = bearbeiten]{Dokument bearbeiten}
+\umlusecase[x = -1, y=-6, scale =0.75, name = jsonspeichern]{als JSON speichern}
+\umlusecase[x=6, y=-6, scale = 0.75, name = jsonladen]{JSON als Dokument laden}
+\umlusecase[x=2.5, y=-8, scale = 0.75, name = banlegen]{Benutzer anlegen}
+\umlusecase[x = 7.5, y=-3, scale = 0.75, name = logverzeichnen]{Aenderung in log verzeichnen}
+
+\umlinclude{anlegen}{pruefen}
+\umlinclude{jsonspeichern}{pruefen}
+\umlinclude{jsonladen}{pruefen}
+\umlinclude{banlegen}{pruefen}
+\umlinclude{bearbeiten}{pruefen}
+\umlinclude{bearbeiten}{logverzeichnen}
 
 
-
+\umlassoc{user}{dokuanzeigen}
+\umlassoc{user}{historieanzeigen}
+\umlassoc{bearbeiter}{anlegen}
+\umlassoc{bearbeiter}{bearbeiten}
+\umlassoc{bearbeiter}{jsonspeichern}
+\umlassoc{bearbeiter}{jsonladen}
+\umlassoc{admin}{banlegen}
 \end{umlsystem}
+
+\end{tikzpicture}
+\newpage
+
+\begin{tikzpicture}
+
+
+
+
+
+
+
+
+
 
 \end{tikzpicture}
 \end{document}
