@@ -18,16 +18,22 @@
 \begin{tikzpicture}
 \umlactor[name=User, x= -3, y= -3, scale= 1] {user}
 \umlactor[name=Person, x= -3, y= 0, scale = 1]{person}
-\umlactor[name= Bearbeiter, x=-3, y=-8, scale= 1]{bearbeiter}
-\umlactor[name= Leser, x= -5, y= -6, scale = 1]{leser}
-\umlactor[name = Admin, x = -1, y=-6, scale= 1]{admin}
-\umlVHVinherit{bearbeiter}{user}
+\umlactor[name= Bearbeiter, x=-3, y=-6, scale= 1]{leser}
+\umlactor[name= Leser, x= -3, y= -9, scale = 1]{bearbeiter}
+\umlactor[name = Admin, x = -3, y=-12, scale= 1]{admin}
 \umlVHVinherit{leser}{user}
-\umlVHVinherit{admin}{user}
 \umlinherit{user}{person}
-
-
-
+\umlinherit{bearbeiter}{leser}
+\umlVHVinherit{admin}{bearbeiter}
+\begin{umlsystem}[x = 3, y= 0]{Bundestagsdokumentverwaltung} 
+\umlusecase[scale = 0.75]{Dokumente anzeigen} 
+\umlusecase[x=5, y=0, scale=0.75]{Aenderungshistorie anzeigen}
+\umlusecase[x = 2.5, y= -4, scale = 0.75]{Berechtigung Pruefen }
+\umlusecase[x = 0, y=-2, scale = 0.75]{Dokument anlegen}
+\umlusecase[x=5, y=-2, scale = 0.75]{Dokument bearbeiten}
+\umlusecase[x = 0, y=-6, scale =0.75]{als JSON speichern}
+\umlusecase[x=5, y=-6, scale = 0.75]{JSON als Dokument laden}
+\umlusecase[x=2.5, y=-8, scale = 0.75]{Benutzer anlegen}
 
 
 
