@@ -1,97 +1,154 @@
-<<<<<<< HEAD
-# Uebung2
+# Uebung 2 – Verwaltung von Bundestagsdokumenten
 
+Das Projekt gehört zum Programmierpraktikum. Es verwaltet drei Dokumentarten: Reden, Protokolle und Drucksachen. Dokumente können angelegt, geändert und als JSON gespeichert werden. Die Änderungen werden beim jeweiligen Dokument festgehalten.
 
+## Voraussetzungen
 
-## Getting started
+- JDK 21 oder neuer
+- Maven
+- Die Bibliothek `org.json:json:20260814`
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Die Java-Version und die JSON-Abhängigkeit stehen in der `pom.xml`. Maven lädt die Bibliothek beim ersten Build herunter. Dafür ist eine Internetverbindung nötig.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Das Projekt lässt sich in IntelliJ IDEA als Maven-Projekt öffnen. Dafür die `pom.xml` auswählen, ein passendes JDK einstellen und die Maven-Abhängigkeiten laden.
 
-## Add your files
+## Projekt bauen
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Im Projektordner ausführen:
 
+```bash
+mvn compile
 ```
-cd existing_repo
-git remote add origin https://ppr.gitlab.texttechnologylab.org/s6862028/uebung2.git
-git branch -M main
-git push -uf origin main
+
+Die übersetzten Klassen liegen danach unter `target/classes`.
+
+
+## Pakete und Klassen
+
+```text
+src/main/java/
+├── de/bundestag/dokumente/
+│   ├── Person.java
+│   ├── User.java
+│   ├── Log.java
+│   └── dokument/
+│       ├── Dokument.java
+│       ├── Rede.java
+│       ├── Protokoll.java
+│       ├── Drucksache.java
+│       ├── DokumentFactory.java
+│       ├── Dokumentenverwaltung.java
+│       ├── DokumentSpeicher.java
+│       └── JsonDokumentSpeicher.java
+└── utilities/
+    └── FileUtilities.java
 ```
 
-## Integrate with your tools
+| Klasse oder Interface | Aufgabe |
+| --- | --- |
+| `Person` | Enthält ID, Name und Alter einer Person. Personen werden über `createPerson` angelegt und in einer Map gesammelt. |
+| `User` | Verbindet eine Person mit einem Benutzerkonto und einer Rolle. Enthält die Prüfung der Änderungsrechte. |
+| `Log` | Hält eine einzelne Änderung mit altem Wert, neuem Wert, Benutzer und Zeitpunkt fest. |
+| `Dokument` | Abstrakte Basisklasse mit ID, Titel, Inhalt, Datum und Änderungshistorie. |
+| `Rede` | Ergänzt das Dokument um eine Person als Sprecher. |
+| `Protokoll` | Ergänzt das Dokument um eine Sitzungsnummer und eine Liste von Reden. |
+| `Drucksache` | Verwendet die gemeinsamen Dokumentdaten und liefert den Dokumenttyp `Drucksache`. |
+| `DokumentFactory` | Erzeugt die drei konkreten Dokumentarten mit statischen Methoden. |
+| `Dokumentenverwaltung` | Verwaltet Dokumente nach ihrer ID und bietet Methoden zum Anlegen, Ändern, Speichern und Laden an. |
+| `DokumentSpeicher` | Interface für das Speichern und Laden der Dokumente. |
+| `JsonDokumentSpeicher` | Setzt das Speicher-Interface mit JSON-Dateien um. |
+| `FileUtilities` | Liest und schreibt den Inhalt von Dateien. Grundlage ist die Hilfsklasse aus der Lehrveranstaltung von Giuseppe Abrami. |
 
-* [Set up project integrations](https://ppr.gitlab.texttechnologylab.org/s6862028/uebung2/-/settings/integrations)
+`Dokument` ist abstrakt, weil die Dokumentarten gemeinsame Daten und Methoden haben. Die Unterklassen geben mit `getDocumentType()` ihren jeweiligen Typ zurück.
 
-## Collaborate with your team
+Die Verwaltung verwendet die Factory zum Anlegen der Dokumente. Beim Laden verwendet auch `JsonDokumentSpeicher` diese Factory. 
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+Für das Speichern und Laden nimmt die Verwaltung ein Objekt vom Typ `DokumentSpeicher` entgegen. Im Projekt wird dafür `JsonDokumentSpeicher` verwendet. Eine andere Speicherklasse könnte dasselbe Interface implementieren.
 
-## Test and Deploy
+## Daten und Beziehungen
 
-Use the built-in continuous integration in GitLab.
+Die Dokumente liegen in einer `Map<Integer, Dokument>`. Der Schlüssel ist die Dokument-ID. Diese ID muss über alle drei Dokumentarten hinweg eindeutig sein.
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+Die Dokument-Map ist in `Dokumentenverwaltung` statisch. Mehrere Verwaltungsobjekte verwenden deshalb denselben Dokumentbestand. Auch `Person` und `User` besitzen statische Maps für ihre Objekte.
 
-***
+Eine Person ist nicht dasselbe wie ein Benutzerkonto. Ein Sprecher kann als `Person` vorhanden sein, ohne ein `User` zu sein. Personen-IDs und Benutzer-IDs gehören zu getrennten Maps.
 
-# Editing this README
+Jede Rede hat einen Sprecher. Ein Protokoll enthält eine Liste von Rede-Objekten. Beim Zuordnen einer Rede wird das vorhandene Objekt verwendet, keine Kopie angelegt.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## Benutzerrollen
 
-## Suggestions for a good README
+Die Rollen werden als Strings gespeichert:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+| Rolle | Vorgesehene Rechte über die Verwaltung |
+| --- | --- |
+| `LESER` | Dokumente und ihre Änderungshistorie ansehen. |
+| `BEARBEITER` | Zusätzlich Dokumente anlegen, bearbeiten, speichern und laden. |
+| `ADMIN` | Dieselben Dokumentrechte wie ein Bearbeiter und zusätzlich Benutzer anlegen. |
 
-## Name
-Choose a self-explaining name for your project.
+`User.checkChangePermissions()` erlaubt Änderungen für `BEARBEITER` und `ADMIN`. Für `LESER` wirft die Methode eine `SecurityException`. `User.createBenutzer` prüft gesondert, ob der aufrufende Benutzer ein Admin ist.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Der erste Admin ist bereits in `User` angelegt und wird über `User.getAdmin()` abgerufen. Seine Benutzer-ID ist `0`. Die zugehörige Admin-Person hat ebenfalls die ID `0` in der Personen-Map.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## Dokumente bearbeiten und Änderungen anzeigen
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Die Verwaltung bietet unter anderem diese Methoden an:
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- `createRede`, `createProtokoll` und `createDrucksache`
+- `changeTitle`, `changeContent` und `changeDate`
+- `changeSpeaker` für eine Rede
+- `addSpeeches` zum Hinzufügen einer einzelnen Rede zu einem Protokoll
+- `printLogs` zum Anzeigen der Änderungshistorien mit der jeweiligen Dokument-ID
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Die Änderungsmethoden in den Dokumentklassen sind `protected`. Der normale Aufruf erfolgt über `Dokumentenverwaltung`, wo zuerst die Berechtigung geprüft wird.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+Jedes Dokument hat eine eigene `ArrayList<Log>`. Änderungen an Titel, Inhalt, Datum oder Sprecher sowie das Hinzufügen einer Rede erzeugen einen Logeintrag. Ein Log enthält:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+- den Namen des geänderten Feldes,
+- den bisherigen und den neuen Wert als String,
+- den Benutzer, der die Änderung vorgenommen hat,
+- den Zeitpunkt als `LocalDateTime`.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Bei einer Sprecheränderung werden die Personen-IDs festgehalten. Beim Hinzufügen einer Rede werden die bisherige und die neue Liste der Rede-IDs gespeichert.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+## JSON speichern und laden
 
-## License
-For open source projects, say how it is licensed.
+`saveDocuments` schreibt den gesamten übergebenen Dokumentbestand in eine Datei. Der bisherige Dateiinhalt wird dabei ersetzt. Die Datei enthält ein JSON-Array mit einem Objekt pro Dokument.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-=======
-# Parliamentary-Documentation-Management
->>>>>>> 25e0b47aefe95d9d77a612c60483a972f585ed4a
+Alle Dokumente haben die Felder `type`, `id`, `title`, `content`, `date` und `logs`. Das Datum wird als String im Format `YYYY-MM-DD` gespeichert.
+
+Zusätzliche Felder sind:
+
+| Dokumentart | JSON-Felder |
+| --- | --- |
+| `Rede` | `speaker id` |
+| `Protokoll` | `session number`, `speech id's`, `number of speech` |
+| `Drucksache` | Keine zusätzlichen Felder. |
+
+Die Schreibweise der Schlüssel entspricht dem aktuellen Code, einschließlich der Leerzeichen. Die Zuordnung der Reden erfolgt über `speech id's`.
+
+Die Logeinträge stehen innerhalb des jeweiligen Dokuments. Sie enthalten `fieldname`, `oldvalue`, `newvalue`, `editor_id` und `time_of_change`.
+
+Beim Laden gibt es zwei Durchläufe. Zuerst werden alle Dokumente und ihre bisherigen Logs angelegt. Danach werden die Rede-IDs der Protokolle mit den geladenen Rede-Objekten verbunden. So ist die Reihenfolge der Dokumente in der Datei für diese Zuordnung nicht entscheidend.
+
+Das Wiederherstellen erfolgt mit `restoreLog` und `restoreSpeeches`. Dabei werden keine neuen Änderungslogs erzeugt.
+
+Beim Aufruf von `Dokumentenverwaltung.loadDocuments` wird die bisherige Dokument-Map durch die geladene Map ersetzt. Die Daten werden nicht mit dem bisherigen Bestand zusammengeführt.
+
+Dort stehen nur ihre IDs. Die passenden Personen und Benutzer müssen daher vor dem Laden bereits in `Person.getPersonsList()` und `User.getUsers()` vorhanden sein. Alle Reden, auf die ein Protokoll verweist, müssen in der geladenen Dokumentdatei enthalten sein.
+
+
+Der Pfad `data/dokumente.json` ist relativ zum Arbeitsverzeichnis des Programms. Personen und Benutzer bleiben bei diesem Speichern und Laden im selben Programmablauf in ihren Maps erhalten.
+
+## Fehlerbehandlung
+
+Eine bereits verwendete Dokument-ID, eine unbekannte Dokument-ID oder ein falscher Dokumenttyp führt in der Verwaltung zu einer `IllegalArgumentException`. Eine Rede kann demselben Protokoll über die Verwaltung nicht zweimal hinzugefügt werden.
+
+Bei fehlender Änderungsberechtigung fängt die Verwaltung die `SecurityException` in ihren Anlege- und Änderungsmethoden ab und gibt die Meldung auf der Konsole aus. Die Anlegemethoden geben in diesem Fall `null` zurück. Ihr Rückgabewert sollte vor der weiteren Verwendung geprüft werden.
+
+Die JSON-Speicherklasse gibt eine `SecurityException` weiter, wenn der Benutzer nicht speichern oder laden darf. Fehler beim Lesen und Schreiben werden als `IOException` an den Aufrufer weitergegeben. Ungültiges JSON oder ein ungültiges Datum kann zusätzlich zu einem Fehler beim Einlesen führen.
+
+## Autor
+
+Fatih Mirza

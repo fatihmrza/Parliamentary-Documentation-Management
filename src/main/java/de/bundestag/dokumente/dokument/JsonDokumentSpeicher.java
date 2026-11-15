@@ -16,12 +16,23 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import utilities.FileUtilities;
 
+/**
+ * public class for saving documents as JSON file and loading it as document instance back and implements DokumentSpeicher interface.
+ * @author Fatih Mirza 8500551
+ */
 public class JsonDokumentSpeicher implements DokumentSpeicher {
 
     public JsonDokumentSpeicher() {
 
     }
 
+    /**
+     * public method for saving Documents by disassembling all attributes of a document hash map and saving it in JSONArray, after JSONObject.
+     * @param documents
+     * @param filePath
+     * @param user
+     * @throws IOException
+     */
     public void saveDocuments(Map<Integer, Dokument> documents, String filePath, User user) throws IOException {
         try {
             user.checkChangePermissions();
@@ -71,9 +82,17 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
 
 
     }
+
+    /**
+     * public method for loading documents from a json file by taking strings from Jsonobjects and storing them into attributes of document classes.
+     * @param filePath
+     * @param user
+     * @return Map<Integer, Dokument>
+     * @throws IOException
+     */
     public Map<Integer, Dokument> loadDocuments(String filePath, User user) throws IOException{
         try {
-            user.checkChangePermissions();
+            user.checkChangePermissions(); // checking if user has permission
             File file = new File(filePath);
             Map<Integer, Dokument> documents = new HashMap<>();
             JSONArray jsonDocuments = FileUtilities.readContentAsJSON(file);
@@ -141,6 +160,11 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
 
     }
 
+    /**
+     * private method to checking if document object instance of a Rede class.
+     * @param doc
+     * @return boolean
+     */
     private boolean checkRede(Dokument doc) {
         if (doc instanceof Rede) {
             return true;
@@ -149,6 +173,11 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
 
     }
 
+    /**
+     * private method to checking if document object instance of a Protokoll class.
+     * @param doc
+     * @return
+     */
     private boolean checkProtokoll(Dokument doc) {
         if (doc instanceof Protokoll) {
             return true;
@@ -156,7 +185,11 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
         return false;
     }
 
-
+    /**
+     * private method to checking if document object instance of a Drucksache class.
+     * @param doc
+     * @return boolean
+     */
     private boolean checkDrucksache(Dokument doc) {
         if (doc instanceof Drucksache) {
             return true;
@@ -164,6 +197,12 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
         return false;
 
     }
+
+    /**
+     * private helper method to converting Jsonarray with ids corresponding rede instances into Arraylist.
+     * @param jsonIds
+     * @return ArrayList<Integer>
+     */
     private ArrayList<Integer> convertJsonToArray(JSONArray jsonIds){
         ArrayList<Integer> ids = new ArrayList<>();
         for (int i = 0; i < jsonIds.length(); i++){
@@ -172,9 +211,16 @@ public class JsonDokumentSpeicher implements DokumentSpeicher {
         return ids;
     }
 
-    protected void restoreSpeeches(Map<Integer, Dokument> documents, Protokoll protokoll, ArrayList<Integer> speechesIdArray, User user) {
+    /**
+     * private helper method to restoring speeches for protokoll instances.
+     * @param documents
+     * @param protokoll
+     * @param speechesIdArray
+     * @param user
+     */
+    private void restoreSpeeches(Map<Integer, Dokument> documents, Protokoll protokoll, ArrayList<Integer> speechesIdArray, User user) {
         try {
-            user.checkChangePermissions();
+            user.checkChangePermissions(); // checking if user has permission
             ArrayList<Rede> restoredSpeeches = new ArrayList<>();
             for (int id : speechesIdArray){
                 if (documents.get(id) instanceof Rede){

@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * public management class to managing all methods by checking user permission to creating, editing, saving and loading documents.
+ * @author Fatih Mirza 8500551
+ */
 public class Dokumentenverwaltung {
 
     private static Map<Integer, Dokument> docs = new HashMap<>();
@@ -16,11 +20,24 @@ public class Dokumentenverwaltung {
 
     }
 
-
+    /**
+     * getter method for getting document hash map.
+     * @return Map<Integer, Dokument>
+     */
     public static Map<Integer, Dokument> getDocuments(){
         return docs;
     }
 
+    /**
+     * public method for creating Rede instances by checking user permission.
+     * @param id
+     * @param title
+     * @param content
+     * @param date
+     * @param speaker
+     * @param user
+     * @return Rede
+     */
     public Rede createRede(int id, String title, String content, LocalDate date, Person speaker, User user) {
         try {
             user.checkChangePermissions();
@@ -37,6 +54,17 @@ public class Dokumentenverwaltung {
             return null;
         }
     }
+
+    /**
+     * public method for creating protokoll instances by checking user permission.
+     * @param id
+     * @param sessionNumber
+     * @param title
+     * @param content
+     * @param date
+     * @param user
+     * @return Protokoll
+     */
     public Protokoll createProtokoll(int id, int sessionNumber, String title, String content, LocalDate date, User user){
         try {
             user.checkChangePermissions();
@@ -55,6 +83,16 @@ public class Dokumentenverwaltung {
         }
 
     }
+
+    /**
+    * public method for creating Drucksache instances by checking user permission.
+     * @param id
+     * @param title
+     * @param content
+     * @param date
+     * @param user
+     * @return
+     */
     public Drucksache createDrucksache(int id, String title, String content, LocalDate date, User user){
         try {
             user.checkChangePermissions();
@@ -73,6 +111,12 @@ public class Dokumentenverwaltung {
         }
     }
 
+    /**
+     * public method for changing content of a document by checking user permission.
+     * @param id
+     * @param newContent
+     * @param user
+     */
     public void changeContent(int id, String newContent, User user){
         try {
             user.checkChangePermissions();
@@ -87,6 +131,12 @@ public class Dokumentenverwaltung {
 
     }
 
+    /**
+     * public method for changing title of a document by checking user permission.
+     * @param id
+     * @param newTitle
+     * @param user
+     */
     public void changeTitle(int id, String newTitle, User user){
         try {
             user.checkChangePermissions();
@@ -99,6 +149,12 @@ public class Dokumentenverwaltung {
         }
     }
 
+    /**
+     * public method for changing date of a document by checking user permission.
+     * @param id
+     * @param newDate
+     * @param user
+     */
     public void changeDate(int id, LocalDate newDate, User user){
         try {
             user.checkChangePermissions();
@@ -110,6 +166,13 @@ public class Dokumentenverwaltung {
             System.out.println(ex.getMessage());
         }
     }
+
+    /**
+     * public method for changing speaker of a Rede document by checking user permission and if there is a document with this id.
+     * @param id
+     * @param newSpeaker
+     * @param user
+     */
     public void changeSpeaker(int id, Person newSpeaker, User user){
         try {
             user.checkChangePermissions();
@@ -129,6 +192,13 @@ public class Dokumentenverwaltung {
             System.out.println(ex.getMessage());
         }
     }
+
+    /**
+     * public method for adding speeches in a Protokoll document by checking user permission and if there is a document with this id.
+     * @param id
+     * @param newRede
+     * @param user
+     */
     public void addSpeeches(int id, Rede newRede, User user){
         try{
             user.checkChangePermissions();
@@ -154,15 +224,32 @@ public class Dokumentenverwaltung {
         }
     }
 
+    /**
+     * public method to saving document which is managed from this class.
+     * @param speicherInstanz
+     * @param filePath
+     * @param user
+     * @throws IOException
+     */
     public void saveDocuments(DokumentSpeicher speicherInstanz, String filePath, User user) throws IOException {
         speicherInstanz.saveDocuments(docs, filePath, user);
     }
 
+    /**
+     * public method to updating loaded document.
+     * @param speicherInstanz
+     * @param filePath
+     * @param user
+     * @throws IOException
+     */
     public void loadDocuments(DokumentSpeicher speicherInstanz, String filePath, User user) throws IOException{
         Map<Integer, Dokument> docs = speicherInstanz.loadDocuments(filePath, user);
         Dokumentenverwaltung.docs = docs;
     }
 
+    /**
+     * public method for printing logs.
+     */
     public void printLogs(){
         for (Dokument doc : docs.values()){
             System.out.println("Document ID: " + doc.getId());
@@ -172,6 +259,11 @@ public class Dokumentenverwaltung {
         }
     }
 
+    /**
+     * private helper method for finding document by id of the document.
+     * @param id
+     * @return Dokument
+     */
     private Dokument findDocumentById(int id){
         if (!(docs.containsKey(id))){
             throw new IllegalArgumentException("There is no document with this id.");
