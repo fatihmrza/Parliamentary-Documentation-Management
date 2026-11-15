@@ -7,8 +7,8 @@
 \usepackage{tikz-uml}
 \usetikzlibrary{positioning}
 \usepackage[left=1.5cm, right=1.5cm, top=1.5cm, bottom=1.5cm, includeheadfoot]{geometry}
-
 \date{13 November 2026}
+\usepackage{ulem}
 
 \begin{document}
 
@@ -56,14 +56,37 @@
 \end{tikzpicture}
 \newpage
 
+\section*{UML-Diagramms}
 \begin{tikzpicture}
 
+\umlclass[x=-2, y=-8, name = user, scale = 0.5]{User}{-\uline{id}: int \\ -person : Person \\ -role: String \\ -name: String {"Read only"} \\ -\uline{admin}: User {"Read Only"} \\ -\uline{users:  Map$<$Integer, User$>$}}{+getName(): String \\ +getRolle(): String \\ +getId(): int \\ +\uline{getAdmin(): User} \\ +\uline{getUsers(): Map$<$Integer, User$>$} \\ +userCheckChangePermissions: void \\ +\uline{createBentuzer(...): User}  }
 
+\umlclass [x=5, y=-8, name = person, scale= 0.5]{Person}{-id : int "{Read Only}" \\ -name : String "{Read Only}" \\ -age : int "{Read Only}"\\ -\uline{persons: Map $<$Integer, Person$>$} \\ $~$\uline{admin: Person}}{+getId(): int \\ +getName(): String \\ +getAge(): int \\ +\uline{getPersonslist}: Map$<$Integer, Person$>$ \\ +\uline{createPerson(...): Person}}
 
+\umlclass [x = 12, y=0, name = log, scale = 0.5]{Log}{-fieldName: String "{Read Only}" \\ -oldValue: String "{Read Only}" \\ - newValue: String "{Read Only}" \\ -user: User "{Read Only}"\\ -timestamp: LocalDateTime "{Read Only}"}{+getFieldName(): String \\ +getOldValue(): String \\ +getNewValue(): String \\ +getUser(): User \\ +getTimestamp(): LocalDateTime \\ +\uline{createLog(...): Log}}
 
+\umlclass [x =5, y=0, name = dokument, scale = 0.5, type=abstract]{Dokument}{-id: int "{Read Only}" \\ -title: String \\ -content: String \\ -date: LocalDate \\ -logs: ArrayList$<$Log$>$}{+getId(): int \\ +getTitle(): String \\ +getContent(): String \\  +getDate(): LocalDate \\ +getLogs(): ArrayList<Log> \\ \#changeContent(...): void \\ \#changeTitle(...): void \\ \#changeDate(...): void \\ \#addLog(...): void \\ \#restoreLog(...): void \\ +\umlvirt{getDocumentType(): String}}
 
+\umlclass [x=5, y=-5, name = rede, scale = 0.5]{Rede}{-speaker: Person \\ -\uline{DOCUMENT\_TYPE}: String {"Read Only"}}{+getSpeakerId(): int \\ \# changeSpeaker(...): void \\ +getDocumentType(): String \\ }
 
+\umlclass [x=12, y=-5, name = protokoll, scale = 0.5]{Protokoll}{-sessionNumber: int "{Read Only}" \\ -speeches: Map$<$Integer, Rede$>$ \\ \uline{-DOCUMENT\_TYPE : String "{Read Only}"}}{+getSessionNumber(): int \\ \#addSpeeches(...): void \\ +getSpeeches: ArrayList$<$Rede$>$ \\ +getDocumentType(): String \\ \#restoreSpeeches(...): void}
 
+\umlclass [x=-2, y=-5, name=drucksache, scale = 0.5]{Drucksache}{-\uline{DOCUMENT\_TYPE: String {"Read Only"}}}{+getDocumentType(): String}
+
+\umlclass [x=5, y=-14, name = dokumentfactory, scale = 0.5]{DokumentFactory}{}{\#\uline{createRede(...): Rede} \\ \#\uline{createProtokoll(...): Protokoll} \\ \#\uline{createDrucksache(...): Drucksache}}
+
+\umlclass [x=12, y= -14, name= dokumentspeicher, scale= 0.5, type=interface]{DokumentSpeicher}{}{+saveDocuments(...): void \\ +loadDocuments(...): Map$<$Integer,Dokument$>$}
+
+\umlclass [x= -2, y=-18, name = jsonspeicher, scale = 0.5]{JsonDokumentSpeicher}{}{+saveDocuments(...): void \\ +loadDocuments(...): Map$<$Integer,Dokument$>$ \\ -checkRede(Dokument doc): boolean \\ -checkProtokoll(Dokument doc): boolean \\ -checkDrucksache(Dokument doc): boolean \\ -convertJsonToArray(JSONArray jsonIds): ArrayList<Integer> \\ \# restoreSpeeches(...): void}
+
+\umlclass [x=5, y=-18, name=dokumentenverwaltung, scale = 0.5]{Dokumentenverwaltung}{-\uline{docs: Map$<$Integer,Dokument$>$}}{+\uline{getDocuments(): Map$<$Integer, Dokument$>$} \\ +createRede(...): Rede \\ +createProtokoll(...): Protokoll \\ +createDrucksache(...): Drucksache \\ +changeContent(): void \\ +changeTitle(...): void \\ +changeDate(...): void \\ changeSpeaker(...): void \\ +addSpeeches(...): void \\ +saveDocuments(...): void \\ +loadDocuments(...): void \\ +printLogs(): void \\ -findDocumentById(int id): Dokument}
+
+\umlclass [x=12, y=-18, name=FileUtilities, scale= 0.5]{FileUtilities}{}{+\uline{readContent(File pfile)}: String \\ +\uline{readContentAsjJSON(File pfile): JSONArray} \\ +\uline{writeContent(File pfile, String sContent): void} \\ +\uline{writeContent(File pfile, String sContent, Charset pCharset): void}}
+
+\umlVHVinherit{Rede}{Dokument}
+\umlVHVinherit{Drucksache}{Dokument}
+\umlVHVinherit{Protokoll}{Dokument}
+\umlassoc{Person}{Rede}
 
 
 
